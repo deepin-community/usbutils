@@ -1,3 +1,50 @@
+usbutils (1:018-1) unstable; urgency=medium
+
+  * New upstream release
+  * Drop patches, all applied upstream
+  * Adapt debian/rules following upstream switch to meson
+  * Patch lsusb.py to support the Debian patch to usb.ids
+  * Change pkg-config build-depends into pkgconf
+  * Demote python dependencies to Build-Depends-Indep. Thanks to Helmut
+    Grohne for the original patch (Closes: #1063456)
+  * Bump Standards-Version to 4.7.0 (no changes)
+  * Update debian/watch to version 4
+  * Set DEB_BUILD_MAINT_OPTIONS = hardening=+all to make lintian happier
+  * Add Vcs-git and Vcs-browser to debian/control
+
+ -- Aurelien Jarno <aurel32@debian.org>  Fri, 25 Oct 2024 23:10:19 +0200
+
+usbutils (1:017-3) unstable; urgency=medium
+
+  * Upload to unstable.
+
+ -- Aurelien Jarno <aurel32@debian.org>  Thu, 04 Jan 2024 23:03:23 +0100
+
+usbutils (1:017-2) experimental; urgency=medium
+
+  * Add a usbutils-py package containing lsusb.py.  Closes: #1020683.
+  * Backport patches from upstream to add manpages:
+    - 01-add-a-manpage-for-lsusb.py.patch
+    - 02-add-lsusb.py.1-to-distcleanfiles.patch
+    - 03-add-a-manpage-for-usbreset.patch
+
+ -- Aurelien Jarno <aurel32@debian.org>  Thu, 04 Jan 2024 14:59:50 +0000
+
+usbutils (1:017-1) unstable; urgency=medium
+
+  * New upstream version:
+    - Fix sort order in lsusb -t.  Closes: #927188.
+
+ -- Aurelien Jarno <aurel32@debian.org>  Tue, 02 Jan 2024 13:08:15 +0000
+
+usbutils (1:015-1) unstable; urgency=medium
+
+  * New upstream version.
+  * Bump Standards-Version to 4.6.2 (no changes).
+  * Update debian/watch file to use https.
+
+ -- Aurelien Jarno <aurel32@debian.org>  Wed, 21 Jun 2023 22:32:07 +0200
+
 usbutils (1:014-1) unstable; urgency=medium
 
   * New upstream version:

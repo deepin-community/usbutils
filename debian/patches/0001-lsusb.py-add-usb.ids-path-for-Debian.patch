@@ -1,0 +1,40 @@
+From 3fd7d1fac4a0f4d135434aa6907d94d0d6e82b33 Mon Sep 17 00:00:00 2001
+From: Aurelien Jarno <aurelien@aurel32.net>
+Date: Fri, 25 Oct 2024 21:30:18 +0200
+Subject: [PATCH] lsusb.py: add usb.ids path for Debian
+
+Commit 008e33075929 ("lsusb.py: remove @DATADIR@ instance") removed the
+possibility to define the location of the usb.ids file through @DATADIR@
+and instead hardcodes the possible paths to the usb.ids file. However
+the Debian path is missing, fix that.
+
+Fixes: 008e33075929 ("lsusb.py: remove @DATADIR@ instance")
+Signed-off-by: Aurelien Jarno <aurelien@aurel32.net>
+---
+ lsusb.py | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/lsusb.py b/lsusb.py
+index bbc4dbb..8f19ec4 100755
+--- a/lsusb.py
++++ b/lsusb.py
+@@ -28,6 +28,7 @@ showwakeup = False
+ prefix = "/sys/bus/usb/devices/"
+ usbids = [
+ 	"/usr/share/hwdata/usb.ids",
++	"/usr/share/misc/usb.ids",
+ 	"/usr/share/usb.ids",
+ ]
+ cols = ("", "", "", "", "", "")
+@@ -64,7 +65,7 @@ def myenum(*args):
+ 	return type('MyEnum', (), enums)
+ 
+ def parse_usb_ids():
+-	"Parse /usr/share/{hwdata/,}usb.ids and fill usbvendors, usbproducts, usbclasses"
++	"Parse /usr/share/{hwdata/,misc/}usb.ids and fill usbvendors, usbproducts, usbclasses"
+ 	vid = 0
+ 	did = 0
+ 	modes = myenum('Vendor', 'Class', 'Misc')
+-- 
+2.45.2
+
