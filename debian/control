@@ -2,15 +2,19 @@ Source: usbutils
 Section: utils
 Priority: optional
 Maintainer: Aurelien Jarno <aurel32@debian.org>
-Build-Depends: debhelper-compat (= 13), libusb-1.0-0-dev, libudev-dev, pkg-config
-Standards-Version: 4.6.0
+Build-Depends: debhelper-compat (= 13), libusb-1.0-0-dev, libudev-dev, meson, pkgconf
+Build-Depends-Indep: dh-sequence-python3, python3
+Standards-Version: 4.7.0
 Rules-Requires-Root: no
 Homepage: https://github.com/gregkh/usbutils
+Vcs-Git: https://salsa.debian.org/aurel32/usbutils.git
+Vcs-Browser: https://salsa.debian.org/aurel32/usbutils
 
 Package: usbutils
 Architecture: linux-any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Breaks: hwdata (<< 0.334-1~), isenkram (<< 0.45~), kinfocenter (<< 4:5.14.5-2~), libosinfo-1.0-0 (<< 1.8.0-1~), usbip (<< 2.0+5.10.4-1~)
+Suggests: usbutils-py
 Multi-Arch: foreign
 Description: Linux USB utilities
  This package contains the lsusb utility for inspecting the devices
@@ -18,3 +22,18 @@ Description: Linux USB utilities
  devices that are currently plugged in, showing the topology of the
  USB bus. It also displays information on each individual device on
  the bus.
+ .
+ lsusb, usb-devices, usbhid-dump, usbreset
+
+Package: usbutils-py
+Architecture: all
+Depends: ${python3:Depends}, ${misc:Depends}, usb.ids
+Multi-Arch: foreign
+Description: Linux USB utilities - lsusb.py command
+ This package contains the Python based lsusb.py utility for inspecting the
+ devices connected to the USB bus. It shows the devices that are currently
+ plugged in, showing the topology of the USB bus. It also provides information
+ on each individual device on the bus, such as the interface speed and details
+ of a device's interfaces, including the driver bound to them and Linux devices
+ provided by the driver, as well as the details of device and interface
+ endpoints.

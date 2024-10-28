@@ -44,13 +44,17 @@ int get_sysfs_name(char *buf, size_t size, libusb_device *dev)
 	}
 
 	len += snprintf(buf, size, "%d-", bnum);
-	for (int i = 0; i < num_pnums; i++)
-		len += snprintf(buf + len, size - len, i ? ".%d" : "%d", pnums[i]);
+	for (int i = 0; i < num_pnums; i++) {
+		int n = snprintf(buf + len, size - len, i ? ".%d" : "%d", pnums[i]);
+		if ((n < 0) || (n >= (int)(size - len)))
+			break;
+		len += n;
+	}
 
 	return len;
 }
 
-int read_sysfs_prop(char *buf, size_t size, char *sysfs_name, char *propname)
+int read_sysfs_prop(char *buf, size_t size, const char *sysfs_name, const char *propname)
 {
 	int n, fd;
 	char path[PATH_MAX];
