@@ -1,3 +1,9 @@
+usbutils (1:014-1deepin1) unstable; urgency=medium
+
+  * Fix memory leak.
+
+ -- xinpeng.wang <wangxinpeng@uniontech.com>  Thu, 27 Mar 2025 15:13:10 +0800
+
 usbutils (1:014-1) unstable; urgency=medium
 
   * New upstream version:
