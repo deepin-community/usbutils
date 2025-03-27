@@ -1,0 +1,44 @@
+From c5e98711d271baa52e7b2974957dd906791a52e9 Mon Sep 17 00:00:00 2001
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Date: Mon, 2 Sep 2024 20:18:02 +0200
+Subject: [PATCH] lsusb: fix memory leak in libusb
+
+When shutting down, tell libusb that we don't want to hold on to any
+references anymore.  This fixes the oft-noticed and reported memory leak
+when running lsusb.
+
+Fixes #182
+
+Reported-by: mcuee
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ lsusb.c   | 2 +-
+ usbmisc.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/lsusb.c b/lsusb.c
+index 909d9aa..5af0310 100644
+--- a/lsusb.c
++++ b/lsusb.c
+@@ -3685,7 +3685,7 @@ static int list_devices(libusb_context *ctx, int busnum, int devnum, int vendori
+ 			dumpdev(dev);
+ 	}
+ 
+-	libusb_free_device_list(list, 0);
++	libusb_free_device_list(list, 1);
+ error:
+ 	return status;
+ }
+diff --git a/usbmisc.c b/usbmisc.c
+index 7e944fb..acf25dc 100644
+--- a/usbmisc.c
++++ b/usbmisc.c
+@@ -128,7 +128,7 @@ libusb_device *get_usb_device(libusb_context *ctx, const char *path)
+ 		}
+ 	}
+ 
+-	libusb_free_device_list(list, 0);
++	libusb_free_device_list(list, 1);
+ 	return dev;
+ }
+
