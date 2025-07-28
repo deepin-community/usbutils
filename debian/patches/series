@@ -1,1 +1,3 @@
-0001-fix-memory-leak-in-libusb.patch
+0001-lsusb.py-add-usb.ids-path-for-Debian.patch
+0002-usbreset-fix-swapped-vendor-and-product-ID-in-help-m.patch
+0003-usbreset.1-fix-groff-warnings-and-small-fixes.patch

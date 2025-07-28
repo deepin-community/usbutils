@@ -1,17 +1,10 @@
 #!/usr/bin/make -f
--include /usr/share/dpkg/buildtools.mk
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 
 %:
 	dh $@
 
-override_dh_auto_build:
-	dh_auto_build
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(CURDIR)/usbreset $(CURDIR)/usbreset.c
-
-override_dh_auto_install:
-	dh_auto_install --destdir=$(CURDIR)/debian/tmp
-	install -m 755 $(CURDIR)/usbreset $(CURDIR)/debian/tmp/usr/bin
-
-override_dh_auto_clean:
-	dh_auto_clean
-	rm -f $(CURDIR)/usbreset
+execute_after_dh_auto_install:
+	install -m 755 $(CURDIR)/obj-$(DEB_HOST_GNU_TYPE)/usbreset $(CURDIR)/debian/tmp/usr/bin
+	install -m 644 $(CURDIR)/man/usbreset.1 $(CURDIR)/debian/tmp/usr/share/man/man1

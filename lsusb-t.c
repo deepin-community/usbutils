@@ -11,7 +11,8 @@
 #include <unistd.h>
 #include <stddef.h>
 
-#include "list.h"
+#include <libusb.h>
+#include "ccan/list/list.h"
 #include "lsusb.h"
 #include "names.h"
 
@@ -20,7 +21,7 @@
 #define MY_PARAM_MAX 64
 
 struct usbinterface {
-	struct list_head list;
+	struct list_node list;
 	struct usbinterface *next;
 	struct usbdevice *parent;
 	unsigned int configuration;
@@ -38,7 +39,7 @@ struct usbinterface {
 };
 
 struct usbdevice {
-	struct list_head list;	/* connect devices independent of the bus */
+	struct list_node list;	/* connect devices independent of the bus */
 	struct usbdevice *next;	/* next port on this hub */
 	struct usbinterface *first_interface;	/* list of interfaces */
 	struct usbdevice *first_child;	/* connect devices on this port */
@@ -66,7 +67,7 @@ struct usbdevice {
 	char product[MY_PARAM_MAX];
 	char serial[MY_PARAM_MAX];
 	char version[MY_PARAM_MAX];
-	char speed[MY_PARAM_MAX];	/* '1.5','12','480','5000' + '\n' */
+	char speed[MY_PARAM_MAX];	/* '1.5','12','480','5000','10000','20000' + '\n' */
 	unsigned int rx_lanes;
 	unsigned int tx_lanes;
 
@@ -85,7 +86,7 @@ struct usbbusnode {
 	unsigned int idProduct;
 	unsigned int idVendor;
 	unsigned int maxchild;
-	char speed[5 + 1];	/* '1.5','12','480','5000' + '\n' */
+	char speed[MY_PARAM_MAX];	/* '1.5','12','480','5000','10000','20000' + '\n' */
 	unsigned int rx_lanes;
 	unsigned int tx_lanes;
 
@@ -97,8 +98,8 @@ struct usbbusnode {
 #define SYSFS_INTx(de,tgt, name) do { tgt->name = read_sysfs_file_int(de,#name,16); } while(0)
 #define SYSFS_STR(de,tgt, name) do { read_sysfs_file_string(de, #name, tgt->name, MY_PARAM_MAX); } while(0)
 
-LIST_HEAD(interfacelist);
-LIST_HEAD(usbdevlist);
+static LIST_HEAD(interfacelist);
+static LIST_HEAD(usbdevlist);
 static struct usbbusnode *usbbuslist;
 
 static const char sys_bus_usb_devices[] = "/sys/bus/usb/devices";
@@ -160,7 +161,7 @@ static void print_usbbusnode(struct usbbusnode *b)
 
 	lanes_to_str(lanes, b->tx_lanes, b->rx_lanes);
 
-	printf("/:  Bus %02u.Port %u: Dev %u, Class=%s, Driver=%s/%up, %sM%s\n", b->busnum, 1,
+	printf("/:  Bus %03u.Port %03u: Dev %03u, Class=%s, Driver=%s/%up, %sM%s\n", b->busnum, 1,
 	       b->devnum, bDeviceClass_to_str(b->bDeviceClass), b->driver, b->maxchild, b->speed, lanes);
 	if (verblevel >= 1) {
 		get_vendor_string(vendor, sizeof(vendor), b->idVendor);
@@ -179,13 +180,16 @@ static void print_usbdevice(struct usbdevice *d, struct usbinterface *i)
 	char lanes[32];
 
 	lanes_to_str(lanes, d->tx_lanes, d->rx_lanes);
-	get_class_string(subcls, sizeof(subcls), i->bInterfaceClass);
+	if (i)
+		get_class_string(subcls, sizeof(subcls), i->bInterfaceClass);
 
-	if (i->bInterfaceClass == 9)
-		printf("Port %u: Dev %u, If %u, Class=%s, Driver=%s/%up, %sM%s\n", d->portnum, d->devnum, i->ifnum, subcls,
+	if (!i)
+		printf("Port %03u: Dev %03u, %sM%s\n", d->portnum, d->devnum, d->speed, lanes);
+	else if (i->bInterfaceClass == 9)
+		printf("Port %03u: Dev %03u, If %u, Class=%s, Driver=%s/%up, %sM%s\n", d->portnum, d->devnum, i->ifnum, subcls,
 		       i->driver, d->maxchild, d->speed, lanes);
 	else
-		printf("Port %u: Dev %u, If %u, Class=%s, Driver=%s, %sM%s\n", d->portnum, d->devnum, i->ifnum, subcls, i->driver,
+		printf("Port %03u: Dev %03u, If %u, Class=%s, Driver=%s, %sM%s\n", d->portnum, d->devnum, i->ifnum, subcls, i->driver,
 		       d->speed, lanes);
 	if (verblevel >= 1) {
 		printf(" %*s", indent, "    ");
@@ -354,10 +358,12 @@ static void add_usb_interface(const char *d_name)
 			p = strrchr(driver, '/');
 			if (p)
 				snprintf(e->driver, sizeof(e->driver), "%s", p + 1);
+		} else {
+			snprintf(e->driver, sizeof(e->driver), "[none]");
 		}
 	} else
 		printf("Can not read driver link for '%s': %d\n", d_name, l);
-	list_add_tail(&e->list, &interfacelist);
+	list_add_tail(&interfacelist, &e->list);
 }
 
 static void add_usb_device(const char *d_name)
@@ -422,7 +428,7 @@ static void add_usb_device(const char *d_name)
 		}
 	} else
 		printf("Can not read driver link for '%s': %d\n", d_name, l);
-	list_add_tail(&d->list, &usbdevlist);
+	list_add_tail(&usbdevlist, &d->list);
 }
 
 static void get_roothub_driver(struct usbbusnode *b, const char *d_name)
@@ -505,11 +511,10 @@ static void assign_dev_to_bus(struct usbdevice *d)
 
 static void assign_dev_to_parent(struct usbdevice *d)
 {
-	struct list_head *l;
 	struct usbdevice *pd;
 	char n[MY_SYSFS_FILENAME_LEN], *p;
-	for (l = usbdevlist.next; l != &usbdevlist; l = l->next) {
-		pd = list_entry(l, struct usbdevice, list);
+
+	list_for_each(&usbdevlist, pd, list) {
 		if (pd == d)
 			continue;
 		if (pd->busnum == d->busnum && pd->portnum == d->parent_portnum) {
@@ -555,7 +560,7 @@ static void assign_interface_to_parent(struct usbdevice *d, struct usbinterface 
 		} else {
 			busnum = strtoul(name, &pn, 10);
 			if (pn && pn != name) {
-				if (p[1] == '0')
+				if (pn[1] == '0')
 					append_businterface(busnum, i);
 			}
 		}
@@ -564,23 +569,19 @@ static void assign_interface_to_parent(struct usbdevice *d, struct usbinterface 
 
 static void connect_devices(void)
 {
-	struct list_head *ld, *li;
 	struct usbdevice *d;
 	struct usbinterface *e;
-	for (ld = usbdevlist.next; ld != &usbdevlist; ld = ld->next) {
-		d = list_entry(ld, struct usbdevice, list);
+
+	list_for_each(&usbdevlist, d, list) {
 		if (d->parent_portnum)
 			assign_dev_to_parent(d);
 		else
 			assign_dev_to_bus(d);
-		for (li = interfacelist.next; li != &interfacelist; li = li->next) {
-			e = list_entry(li, struct usbinterface, list);
+
+		list_for_each(&interfacelist, e, list) {
 			if (!e->parent)
 				assign_interface_to_parent(d, e);
 		}
-	}
-	for (li = interfacelist.next; li != &interfacelist; li = li->next) {
-		e = list_entry(li, struct usbinterface, list);
 	}
 }
 
@@ -632,6 +633,7 @@ static void sort_dev_siblings(struct usbdevice **d)
 		pp = d;
 		swapped = 0;
 		while (p->next) {
+			sort_dev_siblings(&p->next);
 			if (p->portnum > p->next->portnum) {
 				t = p->next;
 				p->next = t->next;
@@ -658,7 +660,7 @@ static void sort_devices(void)
 
 static void sort_busses(void)
 {
-	/* need to reverse sort bus numbers */
+	/* sort in numerical order to match 'lsusb' output */
 	struct usbbusnode *t, *p, **pp;
 	int swapped;
 	do {
@@ -668,7 +670,7 @@ static void sort_busses(void)
 		pp = &usbbuslist;
 		swapped = 0;
 		while (p && p->next) {
-			if (p->busnum < p->next->busnum) {
+			if (p->busnum > p->next->busnum) {
 				t = p->next;
 				p->next = t->next;
 				t->next = p;
@@ -685,11 +687,12 @@ static void sort_busses(void)
 static void print_tree_dev_interface(struct usbdevice *d, struct usbinterface *i)
 {
 	indent += 3;
-	while (i) {
+	do {
 		printf(" %*s", indent, "|__ ");
 		print_usbdevice(d, i);
-		i = i->next;
-	}
+		if (i)
+			i = i->next;
+	} while (i);
 	indent -= 3;
 }
 static void print_tree_dev_children(struct usbdevice *d)
@@ -714,6 +717,28 @@ static void print_tree(void)
 	}
 }
 
+static void cleanup(void)
+{
+	struct usbdevice *device, *tempd;
+	struct usbinterface *interface, *templ;
+	struct usbbusnode *bus, *tempb;
+
+	list_for_each_safe(&usbdevlist, device, tempd, list) {
+		free(device);
+	}
+
+	list_for_each_safe(&interfacelist, interface, templ, list) {
+		free(interface);
+	}
+
+	bus = usbbuslist;
+	while (bus) {
+		tempb = bus->next;
+		free(bus);
+		bus = tempb;
+	}
+}
+
 int lsusb_t(void)
 {
 	DIR *sbud = opendir(sys_bus_usb_devices);
@@ -724,6 +749,7 @@ int lsusb_t(void)
 		sort_devices();
 		sort_busses();
 		print_tree();
+		cleanup();
 	} else
 		perror(sys_bus_usb_devices);
 	return sbud == NULL;

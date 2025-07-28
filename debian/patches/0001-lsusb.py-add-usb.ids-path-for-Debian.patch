@@ -1,0 +1,26 @@
+Description: lsusb.py: add usb.ids path for Debian
+Author: Aurelien Jarno <aurelien@aurel32.net>
+Origin: upstream, https://github.com/gregkh/usbutils/commit/3fd7d1fac4a0f4d135434aa6907d94d0d6e82b33
+
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
+--- a/lsusb.py
++++ b/lsusb.py
+@@ -28,6 +28,7 @@ showwakeup = False
+ prefix = "/sys/bus/usb/devices/"
+ usbids = [
+ 	"/usr/share/hwdata/usb.ids",
++	"/usr/share/misc/usb.ids",
+ 	"/usr/share/usb.ids",
+ ]
+ cols = ("", "", "", "", "", "")
+@@ -64,7 +65,7 @@ def myenum(*args):
+ 	return type('MyEnum', (), enums)
+ 
+ def parse_usb_ids():
+-	"Parse /usr/share/{hwdata/,}usb.ids and fill usbvendors, usbproducts, usbclasses"
++	"Parse /usr/share/{hwdata/,misc/}usb.ids and fill usbvendors, usbproducts, usbclasses"
+ 	vid = 0
+ 	did = 0
+ 	modes = myenum('Vendor', 'Class', 'Misc')

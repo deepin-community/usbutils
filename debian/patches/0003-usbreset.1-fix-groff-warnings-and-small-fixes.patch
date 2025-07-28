@@ -1,0 +1,40 @@
+Description: usbreset.1: fix groff warnings and small fixes
+Author: Bjarni Ingi Gislason <bjarniig@simnet.is>
+Origin: upstream, https://github.com/gregkh/usbutils/commit/bd006be770d176f96c611f939a7f538c1088a9ad
+
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
+--- a/man/usbreset.1
++++ b/man/usbreset.1
+@@ -1,6 +1,6 @@
+ .\" SPDX-License-Identifier: GPL-2.0-only
+ .\" Copyright (c) 2023 Aurelien Jarno <aurelien@aurel32.net>
+-.TH usbreset 1 "04 January 2024" "usbutils" "Linux USB Utilities"
++.TH usbreset 1 "04 January 2024" usbutils "Linux USB Utilities"
+ .IX usbreset
+ .SH NAME
+ usbreset \- send a USB port reset to a USB device
+@@ -12,17 +12,18 @@ usbreset \- send a USB port reset to a USB device
+ 
+ .SH DESCRIPTION
+ .B usbreset
+-is a utility that performs resets on USB devices. It is particularly useful
++is a utility that performs resets on USB devices.
++It is particularly useful for
+ situations where a USB device is unresponsive or exhibits erratic behavior.
+ The USB \fIdevice\fP to be reset can be specified in one of three formats:
+ .TP
+-.BR VVVV:PPPP
++.B VVVV:PPPP
+ Reset by vendor and product IDs
+ .TP
+-.BR BBB/DDD
++.B BBB/DDD
+ Reset by bus and device number
+ .TP
+-.BR "Product"
++.B Product
+ Reset by product name
+ .PP
+ When run without any arguments,
