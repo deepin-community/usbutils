@@ -1,2 +1,2 @@
-version=3
-http://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-(\d.*)\.(?:tgz|tbz2|txz|tar\.(?:gz|bz2|xz))
+version=4
+https://www.kernel.org/pub/linux/utils/usb/usbutils/usbutils-(\d.*)\.(?:tgz|tbz2|txz|tar\.(?:gz|bz2|xz))

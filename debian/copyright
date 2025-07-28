@@ -1,61 +1,214 @@
-This package was debianized by Christopher L Cheney <ccheney@debian.org> on
-Wed, 13 Jun 2001 11:20:06 -0500.
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: usbutils
+Source: https://www.kernel.org/pub/linux/utils/usb/usbutils/
 
-It was downloaded from https://www.kernel.org/pub/linux/utils/usb/usbutils/
-
-Upstream Authors:
-  Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
+Files:
+ debian/*
 Copyright:
-  Copyright 2011 (c) Greg Kroah-Hartman <gregkh@suse.de>
-  Copyright 2016 Stephan Linz <linz@li-pro.net>
-  Copyright (C) 1999, 2000 Thomas Sailer (sailer@ife.ee.ethz.ch)
-  Copyright (C) 1999-2001, 2003 Thomas Sailer (t.sailer@alumni.ethz.ch)
-  Copyright (c) 1999 Thomas Sailer <sailer@ife.ee.ethz.ch>
-  Copyright (C) 2003-2005 David Brownell
-  Copyright (C) 2003 Aurelien Jarno (aurelien@aurel32.net)
-  Copyright (c) 2004 Frans Pop <elendil@planet.nl>
-  Copyright (c) 2004 Greg Kroah-Hartman <greg@kroah.com>
-  Copyright (c) 2004 Randy Dunlap <rdunlap@xenotime.net>
-  Copyright (c) 2004 Thomas Sailer <sailer@ife.ee.ethz.ch>
-  Copyright (c) 2005-2006 David Brownell <dbrownell@users.sourceforge.net>
-  Copyright (c) 2009,2010 Greg Kroah-Hartman <gregkh@suse.de>
-  Copyright (C) 2009-2010 Nikolai Kondrashov
-  Copyright (c) 2009-2016 Alan Stern
-  Copyright (c) 2009 Frans Pop <elendil@planet.nl>
-  Copyright (c) 2009 Greg Kroah-Hartman <gregkh@suse.de>
-  Copyright (c) 2009 Greg Kroah-Hartman <greg@kroah.com>
-  Copyright (c) 2009 Kay Sievers <kay.sievers@vrfy.org>
-  Copyright (c) 2009 Kurt Garloff <garloff@suse.de>
-  Copyright (c) 2009 Randy Dunlap <rdunlap@xenotime.net>
-  Copyright (C) 2010-2011 Nikolai Kondrashov
-  Copyright (c) 2010 Nikolai Kondrashov <spbnick@gmail.com>
-  Copyright (c) 2010 Nikolai Kondrashov
-  Copyright (C) 2010 Nikolai Kondrashov
-  Copyright (c) 2013,2018 Kurt Garloff <kurt@garloff.de>
-  Copyright (C) 2013 Tom Gundersen (teg@jklm.no)
-  Copyright (C) 2013 Tom Gundersen <teg@jklm.no>
-  Copyright (C) 2017-2018 Michael Drake <michael.drake@codethink.co.uk>
-  Copyright (C) 2017 Michael Drake <michael.drake@codethink.co.uk>
-  Copyright (c) 2018 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ Aurelien Jarno <aurel32@debian.org>
+License: GPL-2.0+
 
-License:
+Files:
+ ccan/check_type/check_type.h
+ ccan/config.h
+ ccan/container_of/container_of.h
+ ccan/str/str.h
+ ccan/str/str_debug.h
+ usbutils.spdx
+Copyright:
+ Rusty Russell <rusty@rustcorp.com.au>
+License: CC0-1.0
 
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2 of the License, or
-  (at your option) any later version.
- 
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
+Files:
+ .clang-format
+ .gitignore
+ NEWS
+ autogen.sh
+ justfile
+ lsusb-t.c
+ man/lsusb.8
+ man/lsusb.py.1
+ man/usb-devices.1
+ man/usbreset.1
+ meson.build
+ usbreset.c
+Copyright:
+ Copyright (c) 1999 Thomas Sailer <sailer@ife.ee.ethz.ch>
+ Copyright (c) 2004 Frans Pop <elendil@planet.nl>
+ Copyright (c) 2004 Greg Kroah-Hartman <greg@kroah.com>
+ Copyright (c) 2004 Randy Dunlap <rdunlap@xenotime.net>
+ Copyright (c) 2009,2010 Greg Kroah-Hartman <gregkh@suse.de>
+ Copyright (c) 2009-2016 Alan Stern
+ Copyright (c) 2014-2024 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ Copyright (c) 2020 Sam Morris <sam@robots.org.uk>
+ Copyright (c) 2023 Aurelien Jarno <aurelien@aurel32.net>
+ Miguel Ojeda <ojeda@kernel.org>
+License: GPL-2.0
 
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston,
-  MA 02110-1301 USA.
+Files:
+ README.md
+ desc-defs.c
+ desc-defs.h
+ desc-dump.c
+ desc-dump.h
+ lsusb.c
+ lsusb.h
+ man/usbhid-dump.8
+ names.c
+ names.h
+ sysfs.c
+ sysfs.h
+ usb-devices
+ usb-spec.h
+ usbhid-dump/*
+ usbmisc.c
+ usbmisc.h
+Copyright:
+ Copyright (C) 1999, 2000 Thomas Sailer (sailer@ife.ee.ethz.ch)
+ Copyright (C) 1999-2001, 2003 Thomas Sailer (t.sailer@alumni.ethz.ch)
+ Copyright (C) 2003 Aurelien Jarno (aurelien@aurel32.net)
+ Copyright (C) 2003-2005 David Brownell
+ Copyright (C) 2010 Nikolai Kondrashov <spbnick@gmail.com>
+ Copyright (C) 2010-2011 Nikolai Kondrashov <spbnick@gmail.com>
+ Copyright (C) 2013 Tom Gundersen <teg@jklm.no>
+ Copyright (C) 2017-2018 Michael Drake <michael.drake@codethink.co.uk>
+ Copyright (c) 2009 Frans Pop <elendil@planet.nl>
+ Copyright (c) 2009 Greg Kroah-Hartman <greg@kroah.com>
+ Copyright (c) 2009 Randy Dunlap <rdunlap@xenotime.net>
+ Copyright (c) 2010 Nikolai Kondrashov
+ Copyright (c) 2018 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+ Copyright 2011 (c) Greg Kroah-Hartman <gregkh@suse.de>
+ Copyright Nikolai Kondrashov <spbnick@gmail.com>
+License: GPL-2.0+
 
-On Debian systems, the complete text of the GNU General Public
-License, version 2, can be found in /usr/share/common-licenses/GPL-2.
+Files: lsusb.py
+Copyright:
+ Copyright (c) 2009 Kurt Garloff <garloff@suse.de>
+ Copyright (c) 2013,2018 Kurt Garloff <kurt@garloff.de>
+License: GPL-2.0 or GPL-3.0
 
+Files:
+ .codespellignore
+ .editorconfig
+ .github/actions/setup-alpine/action.yml
+ .github/actions/setup-archlinux/action.yml
+ .github/actions/setup-debian/action.yml
+ .github/actions/setup-fedora/action.yml
+ .github/actions/setup-ubuntu/action.yml
+ .github/cross-files/arch-cross.ini
+ .github/cross-files/debian-cross.ini
+ .github/cross-files/ubuntu-cross.ini
+ .github/dependabot.yml
+ .github/workflows/clang-format.yml
+ .github/workflows/codeql.yml
+ .github/workflows/codespell.yml
+ .github/workflows/main.yml
+ .github/workflows/reuse.yml
+ build-dev.ini
+Copyright:
+ 2024 Emil Velikov <emil.l.velikov@gmail.com>
+ 2024 Lucas De Marchi <lucas.de.marchi@gmail.com>
+License: LGPL-2.1+
+
+Files:
+ ccan/list/list.h
+Copyright:
+ Rusty Russell <rusty@rustcorp.com.au>
+License: MIT
+
+License: CC0-1.0
+ To the extent possible under law, the author(s) have dedicated all copyright
+ and related and neighboring rights to this software to the public domain
+ worldwide. This software is distributed without any warranty.
+ .
+ You should have received a copy of the CC0 Public Domain Dedication along with
+ this software. If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
+ .
+ On Debian systems, the complete text of the CC0 1.0 Universal license can be
+ found in ‘/usr/share/common-licenses/CC0-1.0’.
+
+License: GPL-2.0
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 2 as
+ published by the Free Software Foundation.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GPL license version 2 can
+ be found in the /usr/share/common-licenses/GPL-2 file.
+
+License: GPL-2.0+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GPL license version 2 can
+ be found in the /usr/share/common-licenses/GPL-2 file.
+
+License: GPL-3.0
+ This program is free software: you can redistribute it and/or modify
+ it under the terms of the GNU General Public License version 3 as
+ published by the Free Software Foundation.
+ .
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+ .
+ You should have received a copy of the GNU General Public License
+ along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the GPL license version 3 can
+ be found in the /usr/share/common-licenses/GPL-3 file.
+
+License: LGPL-2.1+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation; either
+ version 2.1 of the License, or (at your option) any later version.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
+ .
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, see
+ <https://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the complete text of the LGPL license can be found
+ in the /usr/share/common-licenses/LGPL-2.1 file.
+
+License: MIT
+ Permission is hereby granted, free of charge, to any person obtaining a
+ copy of this software and associated documentation files (the "Software"),
+ to deal in the Software without restriction, including without limitation
+ the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ and/or sell copies of the Software, and to permit persons to whom the
+ Software is furnished to do so, subject to the following conditions:
+ .
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ DEALINGS IN THE SOFTWARE.

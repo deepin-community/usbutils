@@ -4,24 +4,13 @@
  *
  * Copyright (C) 2003 Aurelien Jarno (aurelien@aurel32.net)
  */
-
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
-
-#ifdef HAVE_ICONV
 #include <iconv.h>
-#endif
-
-#ifdef HAVE_NL_LANGINFO
 #include <langinfo.h>
-#endif
 
 #include "usbmisc.h"
 
@@ -53,6 +42,7 @@ static int readlink_recursive(const char *path, char *buf, size_t bufsize)
 		return readlink_recursive(temp, buf, bufsize);
 	} else {
 		strncpy(buf, path, bufsize);
+		buf[bufsize - 1] = 0;
 		return strlen(buf);
 	}
 }
@@ -137,7 +127,7 @@ libusb_device *get_usb_device(libusb_context *ctx, const char *path)
 		}
 	}
 
-	libusb_free_device_list(list, 0);
+	libusb_free_device_list(list, 1);
 	return dev;
 }
 
@@ -157,12 +147,13 @@ static char *get_dev_string_ascii(libusb_device_handle *dev, size_t size,
 	return buf;
 }
 
-#if defined(HAVE_NL_LANGINFO) && defined(HAVE_ICONV)
 static uint16_t get_any_langid(libusb_device_handle *dev)
 {
 	unsigned char buf[4];
 	int ret = libusb_get_string_descriptor(dev, 0, 0, buf, sizeof buf);
-	if (ret != sizeof buf) return 0;
+
+	if (ret != sizeof buf)
+		return 0;
 	return buf[2] | (buf[3] << 8);
 }
 
@@ -194,21 +185,19 @@ static char *usb_string_to_native(char * str, size_t len)
 	*result_end = 0;
 	return result;
 }
-#endif
 
 char *get_dev_string(libusb_device_handle *dev, uint8_t id)
 {
-#if defined(HAVE_NL_LANGINFO) && defined(HAVE_ICONV)
 	int ret;
 	char *buf, unicode_buf[254];
 	uint16_t langid;
-#endif
 
-	if (!dev || !id) return strdup("");
+	if (!dev || !id)
+		return strdup("");
 
-#if defined(HAVE_NL_LANGINFO) && defined(HAVE_ICONV)
 	langid = get_any_langid(dev);
-	if (!langid) return strdup("(error)");
+	if (!langid)
+		return strdup("(error)");
 
 	/*
 	 * Some devices lie about their string size, so initialize
@@ -226,11 +215,8 @@ char *get_dev_string(libusb_device_handle *dev, uint8_t id)
 
 	buf = usb_string_to_native(unicode_buf + 2,
 	                           ((unsigned char) unicode_buf[0] - 2) / 2);
-
-	if (!buf) return get_dev_string_ascii(dev, 127, id);
+	if (!buf)
+		return get_dev_string_ascii(dev, 127, id);
 
 	return buf;
-#else
-	return get_dev_string_ascii(dev, 127, id);
-#endif
 }

@@ -1,0 +1,40 @@
+Description: usbreset: fix swapped vendor and product ID in help/manpage
+Author: Aurelien Jarno <aurelien@aurel32.net>
+Origin: upstream, https://github.com/gregkh/usbutils/commit/3e11e995a7a91ed393b5dfc294250741ad75a166
+
+---
+This patch header follows DEP-3: http://dep.debian.net/deps/dep3/
+
+--- a/man/usbreset.1
++++ b/man/usbreset.1
+@@ -16,8 +16,8 @@ is a utility that performs resets on USB devices. It is particularly useful
+ situations where a USB device is unresponsive or exhibits erratic behavior.
+ The USB \fIdevice\fP to be reset can be specified in one of three formats:
+ .TP
+-.BR PPPP:VVVV
+-Reset by product and vendor IDs
++.BR VVVV:PPPP
++Reset by vendor and product IDs
+ .TP
+ .BR BBB/DDD
+ Reset by bus and device number
+@@ -28,7 +28,7 @@ Reset by product name
+ When run without any arguments,
+ .B usbreset
+ provides usage information and a list of connected USB devices, including their
+-product and vendor IDs, bus and device numbers, and product names.
++vendor and product IDs, bus and device numbers, and product names.
+ 
+ .SH RETURN VALUE
+ If the specified device is not found, a non-zero exit code is returned.
+--- a/usbreset.c
++++ b/usbreset.c
+@@ -175,7 +175,7 @@ int main(int argc, char **argv)
+ 		dev = find_device(NULL, NULL, NULL, NULL, argv[1]);
+ 	else {
+ 		printf("Usage:\n"
+-		       "  usbreset PPPP:VVVV - reset by product and vendor id\n"
++		       "  usbreset VVVV:PPPP - reset by vendor and product id\n"
+ 		       "  usbreset BBB/DDD   - reset by bus and device number\n"
+ 		       "  usbreset \"Product\" - reset by product name\n\n"
+ 		       "Devices:\n");
